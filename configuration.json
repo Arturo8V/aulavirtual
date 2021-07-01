@@ -5,7 +5,7 @@
     "mysql_hostname": "joseamo.mysql.pythonanywhere-services.com",
     "mysql_username": "joseamo",
     "SECRET_KEY": "123456",
-    "MODE": "debug",
+    "MODE": "debug2",
     "FLASKY_POSTS_PER_PAGE": 10,
     "mysql_databasename": "joseamo$aulavirtual",
     "UPLOAD_FOLDER": "uploads"
