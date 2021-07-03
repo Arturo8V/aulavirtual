@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 39d8b0541cb1
+Revision ID: 276b77a987d6
 Revises: 
-Create Date: 2021-07-01 17:57:03.216783
+Create Date: 2021-07-03 15:47:38.214855
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '39d8b0541cb1'
+revision = '276b77a987d6'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,6 +29,16 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('code')
+    )
+    op.create_table('comment',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('course_id', sa.Integer(), nullable=False),
+    sa.Column('comment', sa.Text(), nullable=True),
+    sa.Column('comment_date', sa.DateTime(), nullable=True),
+    sa.ForeignKeyConstraint(['course_id'], ['course.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('follow',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -81,5 +91,6 @@ def downgrade():
     op.drop_table('participation_redeem')
     op.drop_table('participation_code')
     op.drop_table('follow')
+    op.drop_table('comment')
     op.drop_table('course')
     # ### end Alembic commands ###

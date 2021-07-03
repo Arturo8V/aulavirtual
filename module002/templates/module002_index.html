@@ -1,5 +1,26 @@
 {% extends 'base.html' %}
 
-{% block content %} 
-	<h1> Module002 - v2 </h1>
-{% endblock %} 
+{% block content %}
+
+
+
+      <nav class="navbar navbar-default">
+      <div class="container-fluid">
+
+          <div class="btn-group btn-group-justified">
+
+
+              {% for row in rows %}
+
+                <a  class="btn btn-primary" href={{url_for('module002.module002_forum',course_id=row.course_id)}}>Curso: {{ row.course_name }}</a>
+
+
+              {% endfor %}
+            </div>
+
+
+      </div>
+    </nav>
+
+
+{% endblock %}

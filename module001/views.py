@@ -39,6 +39,15 @@ def module001_course():
                 try:
                     db.session.commit()
                     flash("Course created successfully with code: {}".format(course.code))
+                    follow = Follow(user_id=current_user.id,
+                                    course_id=course.id,
+                                    course_code=course.code,
+                                    course_name=course.name,
+                                    institution_name = course.institution_name)
+
+                    db.session.add(follow)
+                    db.session.commit()
+                    flash("Curso añadido")
                 except:
                     db.session.rollback()
                     flash("Error creating course!")

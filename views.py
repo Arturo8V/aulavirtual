@@ -60,6 +60,8 @@ def signup():
             except:
                 db.session.rollback()
                 flash("Error creating user!")
+
+
     return render_template('signup.html',module="signup", form=form)
 # CONTROLLER - END
 
