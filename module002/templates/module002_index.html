@@ -10,9 +10,9 @@
           <div class="btn-group btn-group-justified">
 
 
-              {% for row in rows %}
+              {% for curso in cursos %}
 
-                <a  class="btn btn-primary" href={{url_for('module002.module002_forum',course_id=row.course_id)}}>Curso: {{ row.course_name }}</a>
+                <a  class="btn btn-primary" href={{url_for('module002.module002_forum',course_id=curso.course_id)}}>Curso: {{ curso.course_name }}</a>
 
 
               {% endfor %}

@@ -25,6 +25,14 @@ def module001_index():
 def module001_course():
     form = CourseForm()
     if request.method == 'POST':
+
+
+        if current_user.profile in ('student'):
+
+            flash("YOU DONT HAVE PERMISSION")
+            return redirect(url_for('index'))
+
+
         if form.validate_on_submit():
             if not form.id.data:
                 course = Course(name=form.name.data.strip(),
@@ -47,7 +55,7 @@ def module001_course():
 
                     db.session.add(follow)
                     db.session.commit()
-                    flash("Curso añadido")
+                    flash("Curso anadido")
                 except:
                     db.session.rollback()
                     flash("Error creating course!")

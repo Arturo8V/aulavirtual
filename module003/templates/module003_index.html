@@ -1,5 +1,63 @@
 {% extends 'base.html' %}
 
-{% block content %} 
-	<h1> Module003 - v2 </h1>
-{% endblock %} 
+{% block content %}
+	    <div class="container-fluid d-print-block">
+        <div class="row pb-3 d-print-block">
+            <div class="col-12">
+                <section aria-label="Contenido">
+                    <span class="notifications"></span>
+                    <div role="main">
+                        <h2>{{task.name}}</h2>
+                        <div class="submissionstatustable">
+                            <h4>{{task.description}}</h4>
+                            <div class="box py-3 boxaligncenter submissionsummarytable">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <th class="cell c0" scope="row">Estado de la assignment</th>
+                                            <td class="cell c1 lastcol">{% if assignment %}Entregado {% else %}No files uploaded {% endif %}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="cell c0" scope="row">Calificación</th>
+                                            <td class="submissionnotgraded cell c1 lastcol">{% if assignment and assignment.mark == None %}Sin calificar {% else %}{{ assignment.mark }} {% endif %}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="cell c0" scope="row">Ultima modificación</th>
+                                            <td class="cell c1 lastcol">{% if assignment %}{{ assignment.date_modified }} {% else %}- {% endif %}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="box py-3 generalbox submissionaction">
+                            {% if professor %}
+                                <div>
+                                    {% if assignment %}<a href="/assignment/download/{{task_id}}/{{alum_id}}" target=”_blank”>{{ assignment.name }}</a>{% endif %}
+                                    <form method="post" action="/assignment/mark">
+                                        <input type="text" name="alumno" value="{{alum_id}}" hidden>
+                                        <input type="text" name="task" value="{{task_id}}" hidden>
+                                        <input type="text" name="mark" placeholder="Mark">
+                                        <button type="submit" style="background-color: grey;" class="btn btn-secondary">Poner nota</button>
+                                    </form>
+                                </div>
+                            {% else %}
+                                {% if assignment %}
+                                    <div class="singlebutton">
+                                        <a href="/assignment/download/{{task_id}}/{{alum_id}}" target=”_blank”>{{ assignment.name }}</a>
+                                        <form method="post" action="/assignment/upload">
+                                            <input type="text" name="del" value="1" hidden>
+                                            <input type="text" name="task" value="{{task_id}}" hidden><br><br>
+                                            <button type="submit" class="btn btn-outline-secondary">Elimina el archivo</button>
+                                        </form>
+                                    </div>
+                                {% else %}
+                                    <div class="singlebutton">
+                                        <form method="post" action="/assignment/upload" enctype="multipart/form-data">
+                                            <input type="text" name="del" value="0" hidden>
+                                            <input type="text" name="task" value="{{task_id}}" hidden>
+                                            <input type="file" name="file" required><br><br>
+                                            <button type="submit" class="btn btn-outline-secondary">Añade un archivo</button>
+                                        </form>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+{% endblock %}

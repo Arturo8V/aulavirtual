@@ -2,55 +2,103 @@
 
 {% import "bootstrap/wtf.html" as wtf %}
 
+
 {% block content %}
 
 
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
 
-              <nav class="navbar navbar-default">
-      <div class="container-fluid">
-
-          <div class="btn-group btn-group-justified">
-
-
-              {% for follow in followed %}
-
-                        <a  class={% if follow.course_id==1 %}"btn btn-primary active"{%else%}"btn btn-primary disabled"{%endif%} href="{{ url_for('module002.module002_forum', course_id=follow.course_id) }}">Curso: {{ follow.course_name }}</a>
+        <div class="btn-group btn-group-justified">
 
 
-              {% endfor %}
+            {% for i in cursos %}
+
+            <a class={% if i.course_id==course_id %}"btn btn-primary disabled"{%else%}"btn btn-primary active"{%endif%}
+                href="{{ url_for('module002.module002_forum', course_id=i.course_id) }}">{{
+                i.course_name }}</a>
+
+
+
+
+            {% endfor %}
+        </div>
+
+
+    </div>
+</nav>
+
+{% for i in cursos %}
+
+
+
+
+    {% if course_id == i.course_id %}
+
+        <h2>Bienvenido al curso {{ i.course_name }}</h2>
+
+    {% endif %}
+
+
+
+{% endfor %}
+
+
+<div>
+    <form style="margin-bottom:3vh;" method="POST"
+        action="{{ url_for('module002.module002_forum', course_id=course_id) }}">
+        <div class="form-group">
+            {{ form.hidden_tag() }}
+            {{ wtf.form_field(form.comment, style='resize:vertical;') }}
+        </div>
+
+        <button type="submit" class="btn btn-lg btn-primary btn-block" type="submit">POST COMMENT</button>
+
+    </form>
+
+
+    {% for text in texto  | reverse %}
+
+
+
+
+
+
+    <div class="list-group">
+
+
+
+
+        <a href="#" class="list-group-item list-group-item-action list-group-item-warning">
+
+
+
+            <div class="d-flex flex-row  ">
+
+                <img class='img-thumbnail  justify-content-start' src="../static/{{text.user_id}}.jpg" width="50"
+                    height="50">
+
+                <h3 class=" font-weight-bold text-danger">{{ usuarios[text.user_id].username }}</h3>
             </div>
 
 
-      </div>
-    </nav>
 
-<div class="col-md-9 list-group-item">
-                <form style="margin-bottom:3vh;" method="POST" action="{{ url_for('module002.module002_forum', course_id=course_id) }}">
-                    <div class="form-group">
-                        {{ form.hidden_tag() }}
-                        {{ wtf.form_field(form.comment, style='resize:vertical;') }}
-                    </div>
+            <p class="mb-1">{{ text.comment }}</p>
+            <small>{{ text.comment_date }}</small>
 
-                    <button type="submit" class="btn btn-lg btn-primary btn-block" type="submit">POSTEAR</button>
-
-                </form>
-
-                {% for msg in msgs | reverse %}
-                        <div class="list-group">
-                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-                                <div class="d-flex w-100 justify-content-between">
-
-                                    <img src="../static/{{msg.user_id}}.jpg" width="50" height="50">
+        </a>
 
 
-                                    <h4 class="mb-1">{{ users[msg.user_id].username }}</h4>
-                                </div>
-                                <p class="mb-1">{{ msg.comment }}</p>
-                                <small>{{ msg.comment_date.strftime('Publicado el %d %h %Y a las %H:%Mh ') + (msg.comment_date.tzinfo or 'UTC') }}</small>
-
-                            </a>
-                        </div>
-                {% endfor %}
 
 
-{% endblock %}
+    </div>
+
+
+
+
+    {% endfor %}
+
+
+
+
+    {% endblock %}

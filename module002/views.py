@@ -13,7 +13,7 @@ def module002_index():
     #user = User.filter_by(id=current_user.id)
     if current_user.profile in ('admin','staff','student'):
         cursos = Follow.query.filter_by(user_id=current_user.id)
-        return render_template("module002_index.html",module="module002", rows=cursos)
+        return render_template("module002_index.html",module="module002", cursos=cursos)
     else:
         flash("Access denied!")
 #        abort(404,description="Access denied!")
@@ -25,30 +25,30 @@ def module002_index():
 
 
 
-@module002.route('/forum/<course_id>', methods=['GET', 'POST'])
+@module002.route('/forum/<int:course_id>', methods=['GET', 'POST'])
 @login_required
 def module002_forum(course_id):
+
     form = CommentForm()
 
     if request.method == 'GET':
 
-        follows = Follow.query.filter_by(user_id=current_user.id)
-        msgs = Comment.query.filter_by(course_id=course_id).all()
+        cursos = Follow.query.filter_by(user_id=current_user.id)
+        texto = Comment.query.filter_by(course_id=course_id).all()
 
-        msg_user_ids = tuple(msg.user_id for msg in msgs)
-        users = User.query.filter(User.id.in_(msg_user_ids)).all()
-        users = {user.id: user for user in users}
+        id_mensaje = list(text.user_id for text in texto)
+        usuarios = User.query.filter(User.id.in_(id_mensaje)).all()
+        usuarios = {user.id: user for user in usuarios}
 
         return render_template("module002_forum.html", module='module002', course_id=course_id,
-                           form=form, followed=follows, msgs=msgs, user=current_user, users=users)
+                           form=form, cursos=cursos, texto=texto, user=current_user, usuarios=usuarios,db=get_db())
 
     elif request.method == 'POST':
 
-        form = CommentForm()
         if current_user.is_authenticated and form.validate_on_submit():
-            print(request.form)
-            comment = Comment(user_id=current_user.id,course_id=course_id,comment=form.comment.data)
-            db.session.add(comment)
+
+            comentario = Comment(user_id=current_user.id,course_id=course_id,comment=form.comment.data)
+            db.session.add(comentario)
             db.session.commit()
             flash("Comentario añadido")
         else:
@@ -57,6 +57,10 @@ def module002_forum(course_id):
 
 
 
+
+
+
 @module002.route('/test')
 def module002_test():
     return 'OK'
+

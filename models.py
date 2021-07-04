@@ -22,6 +22,7 @@ from application import get_app
 app = get_app()
 db = init_db(app)
 
+
 class User(UserMixin,db.Model): # User extends db.Model
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50),unique=True)
@@ -35,6 +36,7 @@ class User(UserMixin,db.Model): # User extends db.Model
                                        onupdate=db.func.current_timestamp())
     course = db.relationship('Course', backref='user', lazy=True)
 
+
 class Course(UserMixin,db.Model): # User extends db.Model
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
@@ -45,6 +47,7 @@ class Course(UserMixin,db.Model): # User extends db.Model
     date_modified = db.Column(db.DateTime,  default=db.func.current_timestamp(),
                                        onupdate=db.func.current_timestamp())
     follow = db.relationship('Follow', backref='course', lazy=True)
+
 
 class Follow(UserMixin,db.Model): # User extends db.Model
     id = db.Column(db.Integer, primary_key=True)
@@ -72,6 +75,7 @@ class ParticipationCode(UserMixin,db.Model): # User extends db.Model
     date_modified = db.Column(db.DateTime,  default=db.func.current_timestamp(),
                                        onupdate=db.func.current_timestamp())
 
+
 class ParticipationRedeem(UserMixin,db.Model): # User extends db.Model
     id = db.Column(db.Integer, primary_key=True)
     participation_code = db.Column(db.String(50))
@@ -91,6 +95,30 @@ class Comment(UserMixin,db.Model):
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
     comment = db.Column(db.Text)
     comment_date = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+
+class Task(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+    description = db.Column(db.Text, nullable=True)
+    date_created  = db.Column(db.DateTime,  default=db.func.current_timestamp())
+    date_modified = db.Column(db.DateTime,  default=db.func.current_timestamp(),
+                                       onupdate=db.func.current_timestamp())
+    course = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
+
+
+class Assignment(UserMixin,db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    file = db.Column(db.LargeBinary, nullable=False)
+    name = db.Column(db.String(50), nullable=False)
+    mark = db.Column(db.Float, nullable=True)
+    date_created  = db.Column(db.DateTime,  default=db.func.current_timestamp())
+    date_modified = db.Column(db.DateTime,  default=db.func.current_timestamp(),
+                                       onupdate=db.func.current_timestamp())
+    user = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    task = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
+
+
 
 
 
